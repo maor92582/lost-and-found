@@ -19,13 +19,13 @@ export class AuthGuard {
     const token = this.extractTokenFromHeader(request);
     console.log(token);
 
-    if (!token) throw new UnauthorizedException();
+    if (!token) throw new UnauthorizedException('Missing or invalid JWT');
     try {
       console.log('hi');
       const payload = await this.jwtService.verifyAsync(token);
       request['user'] = payload;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Missing or invalid JWT');
     }
     return true;
   }
