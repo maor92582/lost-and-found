@@ -1,0 +1,196 @@
+{{+
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hb3JpNTYiLCJzdWIiOjEsImlhdCI6MTc4ODc5ODM5OSwiZXhwIjoxNzg4ODAxOTk5fQ.OvczojhcSqJaUUXhKGYpqPlP8M29PuFTHb0ktj24hTk"
+  exports.defaultHeaders = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  };
+}}
+###create user validation error
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+# >>!  ./outputRedirection.json
+{
+  "username": "maori56",
+  "password": "2"
+}
+?? status == 400
+###create user username already exists
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+# >>!  ./outputRedirection.json
+{
+  "username": "maori5622412",
+  "email": "maor.ifra@gmail.co",
+  "password": "2456Maw@"
+}
+###create user email already exists
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+# >>!  ./outputRedirection.json
+{
+  "username": "maori56224123124",
+  "email": "maor.ifra@gmail.co",
+  "password": "2456Maw@"
+}
+###create user validation error
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+# >>!  ./outputRedirection.json
+{
+  "username": "maori56",
+  "password": "2"
+}
+###login works status 200
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+# >>!  ./outputRedirection.json
+{
+  "username": "maori56",
+  "password": "2"
+}
+###login wont work status 401
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+# >>!  ./outputRedirection.json
+{
+  "username": "maori56",
+  "password": "2"
+}
+
+##get me works
+GET http://localhost:3000/users/me 
+...defaultHeaders
+#get me wrong jwt
+GET http://localhost:3000/users/me 
+Content-Type: application/json
+Authorization: Bearer token
+##Update me works
+PATCH http://localhost:3000/users/me 
+...defaultHeaders
+
+{"Username":"maori56",
+  "Password":"2",
+  "newEmail":"maor.i@gmail.com"
+
+}
+
+### Get all reports
+GET http://localhost:3000/reports
+
+### Get all reports with filters 
+GET http://localhost:3000/reports
+Content-Type: application/json
+
+{"status":"FOUND","isResolved":false,"sortOrder":"DESC","sortBy":"title"
+}
+### create report
+POST http://localhost:3000/reports
+...defaultHeaders
+{"title":"my phone","description":"icant find it anywhere","status":"LOST","eventDate":"2023-12-04T15:30:00Z"
+}
+
+###### create report validation error 
+POST http://localhost:3000/reports
+...defaultHeaders
+{"title":"","description":"icant find it anywhere","status":"LOST","eventDate":"2023-12-04T15:30:00Z"
+}
+###### create report validation error 
+POST http://localhost:3000/reports
+{"title":"","description":"icant find it anywhere","status":"LOST","eventDate":"2023-12-04T15:30:00Z"
+}
+### Get  report with id 
+GET http://localhost:3000/reports/31
+Content-Type: application/json
+
+### Get  report with id not found
+GET http://localhost:3000/reports/66
+Content-Type: application/json
+
+### Update  report with id 
+PATCH http://localhost:3000/reports/47
+Content-Type: application/json
+...defaultHeaders
+{"title":"nir where is my phone","isResolved":true,"description":"nir stole my phone"
+
+}
+
+### Update  report with id error not own
+PATCH http://localhost:3000/reports/28
+Content-Type: application/json
+...defaultHeaders
+{"title":"nir where is my phone","isResolved":true,"description":"nir stole my phone"
+
+}
+
+### Update  report with id error not found
+PATCH http://localhost:3000/reports/66
+Content-Type: application/json
+...defaultHeaders
+{"title":"nir where is my phone","isResolved":true,"description":"nir stole my phone"
+
+}
+
+### DELETE  report with id 
+DELETE http://localhost:3000/reports/48
+Content-Type: application/json
+...defaultHeaders
+
+
+### DELETE  report with id error not own
+DELETE http://localhost:3000/reports/31
+Content-Type: application/json
+...defaultHeaders
+
+### Get  report comments with id 
+GET http://localhost:3000/reports/1/comments
+Content-Type: application/json
+
+### Get  report comments with id 
+GET http://localhost:3000/reports/1/comments
+Content-Type: application/json
+
+
+### create comment on  report comments with id 
+POST http://localhost:3000/reports/1/comments
+...defaultHeaders
+{
+"title":"its mine","description":"you liar"
+
+}
+### create comment on  report comments with id error jwt
+POST http://localhost:3000/reports/1/comments
+{
+"title":"its mine","description":"you liar"
+
+}
+### Update comment on  report comments with id 
+PATCH http://localhost:3000/comments/12
+...defaultHeaders
+
+{
+"title":"its mine","description":"you liar"
+
+}
+### Update comment on  report comments with id error not own
+PATCH http://localhost:3000/comments/1
+...defaultHeaders
+
+{
+"title":"its mine","description":"you liar"
+
+}
+
+
+### Delete comment on  report comments with id 
+DELETE http://localhost:3000/comments/5
+...defaultHeaders
+
+### Delete comment on  report comments with id error not own
+DELETE http://localhost:3000/comments/1
+...defaultHeaders
+
+
+
+
+
+
