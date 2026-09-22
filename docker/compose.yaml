@@ -1,0 +1,13 @@
+services:
+  database:
+    image: postgres
+
+    volumes:
+      - local_volume:/database
+    ports:
+      - "6767:5432"
+    environment:
+      POSTGRES_PASSWORD: pass
+
+volumes:
+  local_volume:
