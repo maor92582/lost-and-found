@@ -5,7 +5,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { classToPlain, Exclude } from 'class-transformer';
 import { Report } from 'src/reports/report.entity';
 import { User } from 'src/user/user.entity';
 
@@ -23,7 +22,4 @@ export class Comment {
   createdAt!: Date;
   @ManyToOne(() => Report, (report) => report.comments)
   report: Report;
-  toJSON() {
-    return classToPlain(this);
-  }
 }

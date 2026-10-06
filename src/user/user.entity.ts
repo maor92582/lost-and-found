@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { classToPlain, Exclude, Transform } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { Report } from 'src/reports/report.entity';
 import { Comment } from 'src/comments/comment.entity';
 import { IsArray, IsOptional } from 'class-validator';

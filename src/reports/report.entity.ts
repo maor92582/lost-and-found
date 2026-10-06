@@ -5,7 +5,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { classToPlain, Exclude } from 'class-transformer';
 import { ReportStatus } from './status.enum';
 import { User } from 'src/user/user.entity';
 import { Comment } from 'src/comments/comment.entity';
