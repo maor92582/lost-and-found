@@ -1,6 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
 import { Comment } from './comment.entity';
-import { newCommentDTO } from './dto/newCommentDto.dto';
+import { NewCommentDTO } from './dto/request/new-comment.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 
@@ -8,15 +8,12 @@ export class CommentRepository extends Repository<Comment> {
   constructor(@InjectDataSource() datasource: DataSource) {
     super(Comment, datasource.createEntityManager());
   }
-  async createComment(dto: newCommentDTO): Promise<void> {
-    console.log('dto: ' + dto);
+  async createComment(dto: NewCommentDTO): Promise<void> {
     const comment = this.create(dto);
-    console.log('createcomment: ' + comment);
     try {
       await this.insert(comment);
     } catch (error) {
       if (error.code == 23505) throw new ConflictException(error);
-      console.log(error);
     }
   }
   async FindComment(search: {}): Promise<Comment> {
@@ -29,7 +26,6 @@ export class CommentRepository extends Repository<Comment> {
         return comment;
       } else throw new NotFoundException();
     } catch (eror) {
-      console.log(eror);
       throw new NotFoundException();
     }
   }

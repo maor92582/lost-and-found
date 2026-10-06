@@ -21,11 +21,3 @@ export const typeOrmConfigFactory = (
     entities: [User, Comment, Report],
   };
 };
-
-// export const dataSourceConfigAsync: TypeOrmModuleAsyncOptions = {
-//   imports: [ConfigModule],
-//   useFactory: async (
-//     configService: ConfigService,
-//   ): Promise<TypeOrmModuleOptions> => TypeormConfig.getOrmConfig(configService),
-//   inject: [ConfigService],
-// };

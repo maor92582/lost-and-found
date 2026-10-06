@@ -9,8 +9,10 @@ import {
 import { UserGuard } from './user.guard';
 import { UserService } from './user.service';
 import { User } from './user.entity';
-import { updateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/request/update-user.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { UserDto } from './dto/response/user.dto';
+import { TransformPlainToInstance } from 'class-transformer';
 
 @Controller('users')
 export class UserController {
@@ -18,16 +20,13 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get('/me')
+  @TransformPlainToInstance(UserDto)
   getUser(@Request() req): Promise<Record<string, any>> {
-    return this.userS
-      .getUserById(req.user.sub)
-      .then((result) => result.toJSON());
+    return this.userS.getUserById(req.user.sub).then((result) => result);
   }
   @UseGuards(AuthGuard)
   @Patch('/me')
-  updateUser(@Request() req, @Body() dto: updateUserDto): Promise<void> {
-    console.log(req.user.sub);
-    console.log(dto);
+  updateUser(@Request() req, @Body() dto: UpdateUserDto): Promise<void> {
     return this.userS.updateUser(req.user.sub, dto);
   }
 }

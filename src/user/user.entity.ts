@@ -15,7 +15,6 @@ export class User {
   @Column({ unique: true })
   email!: string;
 
-  @Exclude({ toPlainOnly: true })
   @Column()
   password!: string;
 
@@ -30,8 +29,4 @@ export class User {
   @Transform(({ value }) => value ?? [])
   @OneToMany(() => Comment, (comment) => comment.user, { nullable: true })
   comments: Comment[];
-
-  toJSON() {
-    return classToPlain(this);
-  }
 }

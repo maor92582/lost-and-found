@@ -2,7 +2,7 @@ import { DataSource, ILike, Repository } from 'typeorm';
 import { Report } from './report.entity';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { CreateRepoDto } from './dto/createRepoDto.dto';
+import { CreateRepoDto } from './dto/request/create-report.dto';
 import { string } from 'yargs';
 import { IsPositive } from 'class-validator';
 import { SortBy, SortOrder } from './sort.enum';
@@ -19,11 +19,8 @@ export class ReportsRepository extends Repository<Report> {
     sort,
     Search,
   ): Promise<Report[]> {
-    console.log(limit, page);
     const positivepage = page - 1 > 0 ? page - 1 : 0;
     const skip = limit * positivepage;
-    console.log(skip);
-    console.log(sort);
 
     return await this.find({
       relations: { comments: true, user: true },
@@ -46,21 +43,16 @@ export class ReportsRepository extends Repository<Report> {
         return report;
       } else throw new NotFoundException();
     } catch (eror) {
-      console.log(eror);
       throw new NotFoundException();
     }
   }
   async createreport(dto: CreateRepoDto): Promise<void> {
-    console.log(dto);
-
     const report = this.create(dto);
     report.isResolved = false;
-    console.log('createrepo: ' + report);
     try {
       await this.insert(report);
     } catch (error) {
       if (error.code == 23505) throw new ConflictException(error);
-      console.log(error);
     }
   }
 }

@@ -4,14 +4,14 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { createUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { AuthRepository } from './auth.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../user/user.entity';
 import { AuthGuard } from './auth.guard';
 import { UserService } from 'src/user/user.service';
-import { loginUserDto } from './dto/login-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -25,13 +25,11 @@ export class AuthService {
     const salt = await bcrypt.genSalt();
     return await bcrypt.hash(password, salt);
   }
-  async signUp(auth: createUserDto): Promise<void> {
-    console.log(auth);
+  async signUp(auth: CreateUserDto): Promise<void> {
     const hash = await this.newHash(auth.password);
     return this.authRepository.createUser(auth, hash);
   }
-  async signIn(auth: loginUserDto): Promise<{ accessToken: string }> {
-    console.log(auth);
+  async signIn(auth: LoginUserDto): Promise<{ accessToken: string }> {
     const { username, password } = auth;
     const user = await this.userS.getUserByName(username);
     const ok = await bcrypt.compare(password, user.password);

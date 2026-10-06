@@ -33,7 +33,4 @@ export class Report {
   comments!: Comment[];
   @Column()
   isResolved!: boolean;
-  toJSON() {
-    return classToPlain(this);
-  }
 }

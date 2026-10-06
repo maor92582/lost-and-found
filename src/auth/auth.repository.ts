@@ -2,13 +2,13 @@ import { Repository } from 'typeorm';
 import { User } from '../user/user.entity';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { createUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 export class AuthRepository extends Repository<User> {
   constructor(@InjectDataSource() datasource: DataSource) {
     super(User, datasource.createEntityManager());
   }
-  async createUser(auth: createUserDto, hash: string): Promise<void> {
+  async createUser(auth: CreateUserDto, hash: string): Promise<void> {
     const { username, email } = auth;
     const user = this.create({ username, password: hash, email });
 

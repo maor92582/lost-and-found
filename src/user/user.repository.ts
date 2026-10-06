@@ -19,7 +19,6 @@ export class UserRepository extends Repository<User> {
         return user;
       } else throw new NotFoundException();
     } catch (eror) {
-      console.log(eror);
       throw new NotFoundException();
     }
   }
