@@ -18,18 +18,18 @@ import { UpdateCommentDTO } from './dto/request/update-comment.dto';
 
 @Controller('comments')
 export class CommentsController {
-  constructor(private commentS: CommentsService) {}
+  constructor(private commentService: CommentsService) {}
   @Patch(':id')
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: false }))
   updateComment(@Param('id') id: string, @Request() req): Promise<void> {
     const dto: UpdateCommentDTO = req.body;
-    return this.commentS.updateById(id, req.user.sub, dto);
+    return this.commentService.updateById(id, req.user.sub, dto);
   }
   @Delete(':id')
   @UseGuards(AuthGuard)
   @HttpCode(204)
   deleteComment(@Param('id') reportid: string, @Request() req) {
-    return this.commentS.deleteById(req.user.sub, reportid);
+    return this.commentService.deleteById(req.user.sub, reportid);
   }
 }

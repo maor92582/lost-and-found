@@ -19,7 +19,7 @@ export class AuthService {
   constructor(
     @InjectRepository(AuthRepository) private authRepository: AuthRepository,
     private jwtService: JwtService,
-    private userS: UserService,
+    private userService: UserService,
   ) {}
   async newHash(password): Promise<string> {
     const salt = await bcrypt.genSalt();
@@ -30,10 +30,10 @@ export class AuthService {
     return this.authRepository.createUser(auth, hash);
   }
   async signIn(auth: LoginUserDto): Promise<{ accessToken: string }> {
-    const { username, password } = auth;
-    const user = await this.userS.getUserByName(username);
+    const { userName, password } = auth;
+    const user = await this.userService.getUserByName(userName);
     const ok = await bcrypt.compare(password, user.password);
-    const payload = { username: user.username, sub: user.id };
+    const payload = { username: user.userName, sub: user.id };
     if (!ok) throw new UnauthorizedException();
     else return { accessToken: await this.jwtService.signAsync(payload) };
   }

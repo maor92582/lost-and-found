@@ -16,17 +16,17 @@ import { TransformPlainToInstance } from 'class-transformer';
 
 @Controller('users')
 export class UserController {
-  constructor(private userS: UserService) {}
+  constructor(private userService: UserService) {}
 
   @UseGuards(AuthGuard)
   @Get('/me')
   @TransformPlainToInstance(UserDto)
   getUser(@Request() req): Promise<Record<string, any>> {
-    return this.userS.getUserById(req.user.sub).then((result) => result);
+    return this.userService.getUserById(req.user.sub).then((result) => result);
   }
   @UseGuards(AuthGuard)
   @Patch('/me')
   updateUser(@Request() req, @Body() dto: UpdateUserDto): Promise<void> {
-    return this.userS.updateUser(req.user.sub, dto);
+    return this.userService.updateUser(req.user.sub, dto);
   }
 }

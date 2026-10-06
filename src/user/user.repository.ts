@@ -5,8 +5,8 @@ import { DataSource } from 'typeorm';
 import { NotFoundException, Search } from '@nestjs/common';
 
 export class UserRepository extends Repository<User> {
-  constructor(@InjectDataSource() datasource: DataSource) {
-    super(User, datasource.createEntityManager());
+  constructor(@InjectDataSource() dataSource: DataSource) {
+    super(User, dataSource.createEntityManager());
   }
 
   async FindUser(search: {}): Promise<User> {

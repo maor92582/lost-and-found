@@ -10,7 +10,7 @@ import { AuthService } from 'src/auth/auth.service';
 export class UserService {
   constructor(
     @InjectRepository(UserRepository) private userRepository: UserRepository,
-    @Inject(forwardRef(() => AuthService)) private authS: AuthService,
+    @Inject(forwardRef(() => AuthService)) private authService: AuthService,
   ) {}
   async getUserById(id: string): Promise<User> {
     return this.userRepository.FindUser({ id });
@@ -22,9 +22,9 @@ export class UserService {
   async updateUser(id: string, dto: UpdateUserDto): Promise<void> {
     const user = await this.getUserById(id);
     const deepP: DeepPartial<User> = {
-      username: dto.Username || user.username,
+      userName: dto.userName || user.userName,
       email: dto.newEmail || user.email,
-      password: (await this.authS.newHash(dto.Password)) || user.password,
+      password: (await this.authService.newHash(dto.password)) || user.password,
     };
     this.userRepository.update({ id: id }, deepP);
   }

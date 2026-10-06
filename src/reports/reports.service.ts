@@ -24,16 +24,16 @@ export class ReportsService {
     @InjectRepository(ReportsRepository)
     @Inject(forwardRef(() => ReportsRepository))
     private reportsRepository: ReportsRepository,
-    @Inject(forwardRef(() => UserService)) private userS: UserService,
+    @Inject(forwardRef(() => UserService)) private userService: UserService,
     @Inject(forwardRef(() => CommentsService))
-    private commentS: CommentsService,
+    private commentService: CommentsService,
   ) {}
 
   async getRById(id: string): Promise<Report> {
     return await this.reportsRepository.FindReport({ id });
   }
   async createComment(dto, reportid: string, userid: string): Promise<void> {
-    return await this.commentS.createComment(dto, reportid, userid);
+    return await this.commentService.createComment(dto, reportid, userid);
   }
   responseHandler(message: string, data?: any) {
     return { message };
@@ -92,7 +92,7 @@ export class ReportsService {
     );
   }
   async createReport(dto: CreateRepoDto, creatorid: string): Promise<void> {
-    const user = await this.userS.getUserById(creatorid);
+    const user = await this.userService.getUserById(creatorid);
     dto.user = user;
     return this.reportsRepository.createreport(dto);
   }

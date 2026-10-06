@@ -9,8 +9,8 @@ import { SortBy, SortOrder } from './sort.enum';
 import { filter } from 'rxjs';
 
 export class ReportsRepository extends Repository<Report> {
-  constructor(@InjectDataSource() datasource: DataSource) {
-    super(Report, datasource.createEntityManager());
+  constructor(@InjectDataSource() dataSource: DataSource) {
+    super(Report, dataSource.createEntityManager());
   }
   async GetAllReports(
     filter,

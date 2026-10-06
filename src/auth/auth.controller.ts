@@ -18,11 +18,11 @@ import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private auths: AuthService) {}
+  constructor(private authService: AuthService) {}
   @Post('register')
   @UsePipes(new ValidationPipe())
   signUp(@Body() auth: CreateUserDto): Promise<void> {
-    return this.auths.signUp(auth);
+    return this.authService.signUp(auth);
   }
   @UseGuards(AuthGuard('local'))
   @Post('login')

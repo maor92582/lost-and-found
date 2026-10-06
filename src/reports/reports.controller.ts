@@ -29,28 +29,28 @@ import { TransformPlainToInstance } from 'class-transformer';
 
 @Controller('reports')
 export class ReportsController {
-  constructor(private reportS: ReportsService) {}
+  constructor(private reportService: ReportsService) {}
   @Get('/:id')
   @TransformPlainToInstance(ReportDto)
   getReport(@Param('id') id) {
-    return this.reportS.getRById(id).then((report) => report);
+    return this.reportService.getRById(id).then((report) => report);
   }
   @Get(':id/comments')
   getReportcomments(@Param('id') id): Promise<Record<string, any>> {
-    return this.reportS.getRById(id).then((report) => report.comments);
+    return this.reportService.getRById(id).then((report) => report.comments);
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard)
   updateReport(@Param('id') id: string, @Request() req): Promise<void> {
     const dto: UpdateReportsDto = req.body;
-    return this.reportS.updateById(id, req.user.sub, dto);
+    return this.reportService.updateById(id, req.user.sub, dto);
   }
   @Delete(':id')
   @UseGuards(AuthGuard)
   @HttpCode(204)
   deleteReport(@Param('id') reportid: string, @Request() req) {
-    return this.reportS.deleteById(req.user.sub, reportid);
+    return this.reportService.deleteById(req.user.sub, reportid);
   }
 
   @Get()
@@ -59,8 +59,8 @@ export class ReportsController {
   getReports(@Body() dto: GetReportsDto): Promise<Record<string, any>> {
     try {
       const { search, sortBy, sortOrder, limit, page, ...filter } = dto;
-      const newf = this.reportS.removeEmpty(filter);
-      return this.reportS.getReports(
+      const newf = this.reportService.removeEmpty(filter);
+      return this.reportService.getReports(
         newf,
         limit,
         page,
@@ -76,7 +76,7 @@ export class ReportsController {
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: false }))
   createReport(@Request() req, @Body() dto: CreateRepoDto): Promise<void> {
-    return this.reportS.createReport(dto, req.user.sub);
+    return this.reportService.createReport(dto, req.user.sub);
   }
   @Post(':id/comments')
   @UseGuards(AuthGuard)
@@ -87,6 +87,6 @@ export class ReportsController {
     @Body() dto,
   ): Promise<void> {
     const newdto = { createdAt: new Date(), ...dto };
-    return this.reportS.createComment(newdto, reportid, req.user.sub);
+    return this.reportService.createComment(newdto, reportid, req.user.sub);
   }
 }

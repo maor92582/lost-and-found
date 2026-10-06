@@ -22,8 +22,9 @@ export class CommentsService {
   constructor(
     @InjectRepository(CommentRepository)
     private commentRepository: CommentRepository,
-    @Inject(forwardRef(() => UserService)) private userS: UserService,
-    @Inject(forwardRef(() => ReportsService)) private reportS: ReportsService,
+    @Inject(forwardRef(() => UserService)) private userService: UserService,
+    @Inject(forwardRef(() => ReportsService))
+    private reportService: ReportsService,
   ) {}
   @UsePipes(new ValidationPipe({ transform: true, whitelist: false }))
   async createComment(
@@ -31,8 +32,8 @@ export class CommentsService {
     creatorid: string,
     reportid: string,
   ): Promise<void> {
-    dto.user = await this.userS.getUserById(creatorid);
-    dto.report = await this.reportS.getRById(reportid);
+    dto.user = await this.userService.getUserById(creatorid);
+    dto.report = await this.reportService.getRById(reportid);
     return this.commentRepository.createComment(dto);
   }
   async getCommentById(id: string): Promise<Comment> {
