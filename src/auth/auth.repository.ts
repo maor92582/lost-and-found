@@ -5,7 +5,7 @@ import { DataSource } from 'typeorm';
 import { createUserDto } from './dto/create-user.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 export class AuthRepository extends Repository<User> {
-  constructor(@InjectDataSource('lost-and-found') datasource: DataSource) {
+  constructor(@InjectDataSource() datasource: DataSource) {
     super(User, datasource.createEntityManager());
   }
   async createUser(auth: createUserDto, hash: string): Promise<void> {

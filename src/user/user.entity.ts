@@ -8,23 +8,29 @@ import { IsArray, IsOptional } from 'class-validator';
 export class User {
   @PrimaryGeneratedColumn()
   id!: string;
+
   @Column({ unique: true })
   username!: string;
+
   @Column({ unique: true })
   email!: string;
+
   @Exclude({ toPlainOnly: true })
   @Column()
   password!: string;
+
   @IsOptional()
   @IsArray()
   @Transform(({ value }) => value ?? [])
   @OneToMany(() => Report, (report) => report.user, { nullable: true })
   reports: Report[];
+
   @IsArray()
   @IsOptional()
   @Transform(({ value }) => value ?? [])
   @OneToMany(() => Comment, (comment) => comment.user, { nullable: true })
   comments: Comment[];
+
   toJSON() {
     return classToPlain(this);
   }

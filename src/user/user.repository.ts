@@ -5,7 +5,7 @@ import { DataSource } from 'typeorm';
 import { NotFoundException, Search } from '@nestjs/common';
 
 export class UserRepository extends Repository<User> {
-  constructor(@InjectDataSource('lost-and-found') datasource: DataSource) {
+  constructor(@InjectDataSource() datasource: DataSource) {
     super(User, datasource.createEntityManager());
   }
 

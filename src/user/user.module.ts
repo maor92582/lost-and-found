@@ -7,10 +7,7 @@ import { UserService } from './user.service';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User], 'lost-and-found'),
-    forwardRef(() => AuthModule),
-  ],
+  imports: [TypeOrmModule.forFeature([User]), forwardRef(() => AuthModule)],
   providers: [UserRepository, UserService],
   controllers: [UserController],
   exports: [UserService],

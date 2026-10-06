@@ -5,7 +5,7 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 
 export class CommentRepository extends Repository<Comment> {
-  constructor(@InjectDataSource('lost-and-found') datasource: DataSource) {
+  constructor(@InjectDataSource() datasource: DataSource) {
     super(Comment, datasource.createEntityManager());
   }
   async createComment(dto: newCommentDTO): Promise<void> {

@@ -13,20 +13,18 @@ import { CommentsController } from './comments/comments.controller';
 import { CommentsModule } from './comments/comments.module';
 import { Comment } from './comments/comment.entity';
 import { Report } from './reports/report.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { typeOrmConfigFactory } from './config/dataSource.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      name: 'lost-and-found',
-      type: 'postgres',
-      host: 'localhost',
-      port: 6767,
-      username: 'postgres',
-      password: 'pass',
-      database: 'laf-manag',
-      autoLoadEntities: true,
-      synchronize: true,
-      entities: [User, Comment, Report],
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: typeOrmConfigFactory,
     }),
 
     AuthModule,

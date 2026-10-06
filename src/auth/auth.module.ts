@@ -17,7 +17,7 @@ import { PassportModule } from '@nestjs/passport';
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     UserModule,
-    TypeOrmModule.forFeature([User], 'lost-and-found'),
+    TypeOrmModule.forFeature([User]),
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
