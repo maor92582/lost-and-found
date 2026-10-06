@@ -3,9 +3,9 @@ import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
-import { Comment } from 'src/comments/comment.entity';
-import { Report } from 'src/reports/report.entity';
-import { User } from 'src/user/user.entity';
+import { Comment } from '../comments/comment.entity';
+import { Report } from '../reports/report.entity';
+import { User } from '../user/user.entity';
 export const typeOrmConfigFactory = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => {

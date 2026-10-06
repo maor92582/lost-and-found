@@ -6,6 +6,10 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:generate": "npm run typeorm -- migration:generate -d ./typeorm-cli.config.ts ./src/migrations/RenameColumn",
+    "migration:run": "npm run typeorm -- migration:run -d ./typeorm-cli.config.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d ./typeorm-cli.config.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

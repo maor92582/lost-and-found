@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -20,16 +21,17 @@ export class Report {
   description!: string;
   @Column()
   status!: ReportStatus;
-  @Column()
+  @Column({ name: 'created_at' })
   createdAt!: Date;
-  @Column()
+  @Column({ name: 'event_date' })
   eventDate!: Date;
   @ManyToOne(() => User, (user) => user.reports)
+  @JoinColumn({ name: 'user_id' })
   user!: User;
   @IsOptional()
   @OneToMany(() => Comment, (comment) => comment.report)
   @IsOptional()
   comments!: Comment[];
-  @Column()
+  @Column({ name: 'is_resolved' })
   isResolved!: boolean;
 }
