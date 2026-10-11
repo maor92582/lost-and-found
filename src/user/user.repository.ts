@@ -15,6 +15,7 @@ export class UserRepository extends Repository<User> {
         where: search,
         relations: { reports: true, comments: true },
       });
+      console.log(user);
       if (user) {
         return user;
       } else throw new NotFoundException();

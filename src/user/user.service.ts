@@ -15,8 +15,8 @@ export class UserService {
   async getUserById(id: string): Promise<User> {
     return this.userRepository.FindUser({ id });
   }
-  async getUserByName(username: string): Promise<User> {
-    return await this.userRepository.FindUser({ username });
+  async getUserByName(userName: string): Promise<User> {
+    return await this.userRepository.FindUser({ userName });
   }
 
   async updateUser(id: string, dto: UpdateUserDto): Promise<void> {

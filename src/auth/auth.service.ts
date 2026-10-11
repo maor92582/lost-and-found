@@ -1,15 +1,8 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthRepository } from './auth.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../user/user.entity';
-import { AuthGuard } from './auth.guard';
 import { UserService } from 'src/user/user.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
@@ -33,7 +26,7 @@ export class AuthService {
     const { userName, password } = auth;
     const user = await this.userService.getUserByName(userName);
     const ok = await bcrypt.compare(password, user.password);
-    const payload = { username: user.userName, sub: user.id };
+    const payload = { userName: user.userName, sub: user.id };
     if (!ok) throw new UnauthorizedException();
     else return { accessToken: await this.jwtService.signAsync(payload) };
   }

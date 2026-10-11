@@ -6,11 +6,11 @@ import { LoginUserDto } from '../dto/login-user.dto';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private authS: AuthService) {
+  constructor(private authService: AuthService) {
     super({ usernameField: 'userName', passwordField: 'password' });
   }
   validate(userName: string, password: string) {
     const user: LoginUserDto = { userName, password };
-    return this.authS.signIn(user);
+    return this.authService.signIn(user);
   }
 }
