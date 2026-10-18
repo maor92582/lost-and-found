@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { updateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/request/update-user.dto';
 import { DeepPartial } from 'typeorm';
 import { AuthService } from 'src/auth/auth.service';
 
@@ -10,25 +10,22 @@ import { AuthService } from 'src/auth/auth.service';
 export class UserService {
   constructor(
     @InjectRepository(UserRepository) private userRepository: UserRepository,
-    @Inject(forwardRef(() => AuthService)) private authS: AuthService,
+    @Inject(forwardRef(() => AuthService)) private authService: AuthService,
   ) {}
   async getUserById(id: string): Promise<User> {
     return this.userRepository.FindUser({ id });
   }
-  async getUserByName(username: string): Promise<User> {
-    return await this.userRepository.FindUser({ username });
+  async getUserByName(userName: string): Promise<User> {
+    return await this.userRepository.FindUser({ userName });
   }
 
-  async updateUser(id: string, dto: updateUserDto): Promise<void> {
-    // const user = this.getUserByName(username);
-    console.log(dto.Password);
+  async updateUser(id: string, dto: UpdateUserDto): Promise<void> {
     const user = await this.getUserById(id);
     const deepP: DeepPartial<User> = {
-      username: dto.Username || user.username,
+      userName: dto.userName || user.userName,
       email: dto.newEmail || user.email,
-      password: (await this.authS.newHash(dto.Password)) || user.password,
+      password: (await this.authService.newHash(dto.password)) || user.password,
     };
-    console.log(deepP, dto.Password);
     this.userRepository.update({ id: id }, deepP);
   }
 }

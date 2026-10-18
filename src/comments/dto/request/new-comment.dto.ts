@@ -2,7 +2,7 @@ import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 import { Report } from 'src/reports/report.entity';
 import { User } from 'src/user/user.entity';
 
-export class newCommentDTO {
+export class NewCommentDTO {
   @IsNotEmpty()
   @IsString()
   title!: string;

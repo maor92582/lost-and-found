@@ -1,11 +1,11 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { classToPlain, Exclude } from 'class-transformer';
 import { ReportStatus } from './status.enum';
 import { User } from 'src/user/user.entity';
 import { Comment } from 'src/comments/comment.entity';
@@ -21,19 +21,17 @@ export class Report {
   description!: string;
   @Column()
   status!: ReportStatus;
-  @Column()
+  @Column({ name: 'created_at' })
   createdAt!: Date;
-  @Column()
+  @Column({ name: 'event_date' })
   eventDate!: Date;
   @ManyToOne(() => User, (user) => user.reports)
+  @JoinColumn({ name: 'user_id' })
   user!: User;
   @IsOptional()
   @OneToMany(() => Comment, (comment) => comment.report)
   @IsOptional()
   comments!: Comment[];
-  @Column()
+  @Column({ name: 'is_resolved' })
   isResolved!: boolean;
-  toJSON() {
-    return classToPlain(this);
-  }
 }

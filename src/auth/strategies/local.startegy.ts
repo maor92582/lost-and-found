@@ -2,15 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { AuthService } from '../auth.service';
-import { loginUserDto } from '../dto/login-user.dto';
+import { LoginUserDto } from '../dto/login-user.dto';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private authS: AuthService) {
-    super({ usernameField: 'username', passwordField: 'password' });
+  constructor(private authService: AuthService) {
+    super({ usernameField: 'userName', passwordField: 'password' });
   }
-  validate(username: string, password: string) {
-    const user: loginUserDto = { username, password };
-    return this.authS.signIn(user);
+  validate(userName: string, password: string) {
+    const user: LoginUserDto = { userName, password };
+    return this.authService.signIn(user);
   }
 }

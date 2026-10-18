@@ -10,26 +10,20 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { createUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { User } from '../user/user.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { loginUserDto } from './dto/login-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private auths: AuthService) {}
+  constructor(private authService: AuthService) {}
   @Post('register')
   @UsePipes(new ValidationPipe())
-  signUp(@Body() auth: createUserDto): Promise<void> {
-    return this.auths.signUp(auth);
+  signUp(@Body() auth: CreateUserDto): Promise<void> {
+    return this.authService.signUp(auth);
   }
-  //   @UseGuards(AuthGuard('local'))
-  //   @Post('login')
-  //   signIn(@Body() auth: loginUserDto): Promise<{ accessToken: string }> {
-  //     console.log(typeof auth);
-  //     return this.auths.signIn(auth);
-  //   }
   @UseGuards(AuthGuard('local'))
   @Post('login')
   @HttpCode(200)

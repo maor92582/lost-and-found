@@ -9,7 +9,7 @@ import { CommentRepository } from './comment.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Comment], 'lost-and-found'),
+    TypeOrmModule.forFeature([Comment]),
     forwardRef(() => ReportsModule),
     forwardRef(() => UserModule),
   ],

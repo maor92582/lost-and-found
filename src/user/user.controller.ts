@@ -6,28 +6,31 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { UserGuard } from './user.guard';
 import { UserService } from './user.service';
-import { User } from './user.entity';
-import { updateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/request/update-user.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { UserDto } from './dto/response/user.dto';
+import { TransformPlainToInstance } from 'class-transformer';
 
 @Controller('users')
 export class UserController {
-  constructor(private userS: UserService) {}
+  constructor(private userService: UserService) {}
 
   @UseGuards(AuthGuard)
   @Get('/me')
-  getUser(@Request() req): Promise<Record<string, any>> {
-    return this.userS
-      .getUserById(req.user.sub)
-      .then((result) => result.toJSON());
+  @TransformPlainToInstance(UserDto)
+  async getUser(@Request() req) {
+    // const dto = new GetUserDto();
+    // dto.id = String(req.user.sub);
+    // const errors = await validate(dto);
+
+    // // 3. בודקים אם יש שגיאות (למשל, אם המשתמש לא קיים במסד הנתונים)
+    // console.log(errors);
+    return this.userService.getUserById(req.user.sub).then((result) => result);
   }
   @UseGuards(AuthGuard)
   @Patch('/me')
-  updateUser(@Request() req, @Body() dto: updateUserDto): Promise<void> {
-    console.log(req.user.sub);
-    console.log(dto);
-    return this.userS.updateUser(req.user.sub, dto);
+  updateUser(@Request() req, @Body() dto: UpdateUserDto): Promise<void> {
+    return this.userService.updateUser(req.user.sub, dto);
   }
 }

@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { ReportStatus } from '../status.enum';
+import { ReportStatus } from '../../status.enum';
 import { User } from 'src/user/user.entity';
 import { Transform } from 'class-transformer';
 

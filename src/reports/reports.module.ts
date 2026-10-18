@@ -9,7 +9,7 @@ import { CommentsModule } from 'src/comments/comments.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Report], 'lost-and-found'),
+    TypeOrmModule.forFeature([Report]),
     forwardRef(() => UserModule),
     forwardRef(() => CommentsModule),
   ],

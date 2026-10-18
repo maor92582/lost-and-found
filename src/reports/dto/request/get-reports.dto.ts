@@ -6,17 +6,12 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { ReportStatus } from '../status.enum';
+import { ReportStatus } from '../../status.enum';
 import { User } from 'src/user/user.entity';
-import { SortBy, SortOrder } from '../sort.enum';
+import { SortBy, SortOrder } from '../../sort.enum';
 import { Transform } from 'class-transformer';
 
 export class GetReportsDto {
-  //   @Transform(({ value }) => {
-  //     if (value == 'LOST') return ReportStatus.LOST;
-  //     else if (value == 'FOUND') return ReportStatus.FOUND;
-  //     else if (!value) return 'f';
-  //   })
   @IsEnum(ReportStatus)
   @IsOptional()
   status: ReportStatus;

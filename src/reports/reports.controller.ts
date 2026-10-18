@@ -15,52 +15,52 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ReportsService } from './reports.service';
-import { CreateRepoDto } from './dto/createRepoDto.dto';
+import { CreateRepoDto } from './dto/request/create-report.dto';
 import { get, request } from 'http';
 import { ReportStatus } from './status.enum';
 import { REQUEST } from '@nestjs/core';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { GetReportsDto } from './dto/getReportsDto.dto';
+import { GetReportsDto } from './dto/request/get-reports.dto';
 import { error } from 'console';
 import { SortOrder } from './sort.enum';
-import { UpdateReportsDto } from './dto/updateReportDto.dto';
+import { UpdateReportsDto } from './dto/request/update-report.dto';
+import { ReportDto } from './dto/response/report.dto';
+import { TransformPlainToInstance } from 'class-transformer';
 
 @Controller('reports')
 export class ReportsController {
-  constructor(private reportS: ReportsService) {}
+  constructor(private reportService: ReportsService) {}
   @Get('/:id')
-  getReport(@Param('id') id): Promise<Record<string, any>> {
-    return this.reportS.getRById(id).then((report) => report.toJSON());
+  @TransformPlainToInstance(ReportDto)
+  getReport(@Param('id') id) {
+    return this.reportService.getRById(id).then((report) => report);
   }
   @Get(':id/comments')
   getReportcomments(@Param('id') id): Promise<Record<string, any>> {
-    return this.reportS.getRById(id).then((report) => report.comments);
+    return this.reportService.getRById(id).then((report) => report.comments);
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard)
   updateReport(@Param('id') id: string, @Request() req): Promise<void> {
     const dto: UpdateReportsDto = req.body;
-    return this.reportS.updateById(id, req.user.sub, dto);
+    return this.reportService.updateById(id, req.user.sub, dto);
   }
   @Delete(':id')
   @UseGuards(AuthGuard)
   @HttpCode(204)
   deleteReport(@Param('id') reportid: string, @Request() req) {
-    return this.reportS.deleteById(req.user.sub, reportid);
-
-    // return 'deleted';
+    return this.reportService.deleteById(req.user.sub, reportid);
   }
 
   @Get()
   @UsePipes(new ValidationPipe({ transform: true, whitelist: false }))
+  @TransformPlainToInstance(ReportDto)
   getReports(@Body() dto: GetReportsDto): Promise<Record<string, any>> {
     try {
-      console.log(dto);
       const { search, sortBy, sortOrder, limit, page, ...filter } = dto;
-      const newf = this.reportS.removeEmpty(filter);
-      console.log(sortBy);
-      return this.reportS.getReports(
+      const newf = this.reportService.removeEmpty(filter);
+      return this.reportService.getReports(
         newf,
         limit,
         page,
@@ -69,7 +69,6 @@ export class ReportsController {
         search,
       );
     } catch (error) {
-      console.log(error);
       throw new Error();
     }
   }
@@ -77,10 +76,7 @@ export class ReportsController {
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: false }))
   createReport(@Request() req, @Body() dto: CreateRepoDto): Promise<void> {
-    // dto.createdAt = new Date();
-    // dto.eventDate = new Date();
-    console.log(dto.description, dto.title);
-    return this.reportS.createReport(dto, req.user.sub);
+    return this.reportService.createReport(dto, req.user.sub);
   }
   @Post(':id/comments')
   @UseGuards(AuthGuard)
@@ -91,7 +87,6 @@ export class ReportsController {
     @Body() dto,
   ): Promise<void> {
     const newdto = { createdAt: new Date(), ...dto };
-    console.log(dto.description, dto.title);
-    return this.reportS.createComment(newdto, reportid, req.user.sub);
+    return this.reportService.createComment(newdto, reportid, req.user.sub);
   }
 }
